@@ -1,0 +1,39 @@
+import java.util.concurrent.Semaphore;
+
+class Foo {
+    private Semaphore s2;
+    private Semaphore s3;
+
+    public Foo() {
+        // Initialize semaphores with 0 permits so second and third block initially
+        s2 = new Semaphore(0);
+        s3 = new Semaphore(0);
+    }
+
+    public void first(Runnable printFirst) throws InterruptedException {
+        // printFirst.run() outputs "first". Do not change or remove this line.
+        printFirst.run();
+        
+        // Release permit for second() to execute
+        s2.release();
+    }
+
+    public void second(Runnable printSecond) throws InterruptedException {
+        // Wait until first() releases a permit
+        s2.acquire();
+        
+        // printSecond.run() outputs "second". Do not change or remove this line.
+        printSecond.run();
+        
+        // Release permit for third() to execute
+        s3.release();
+    }
+
+    public void third(Runnable printThird) throws InterruptedException {
+        // Wait until second() releases a permit
+        s3.acquire();
+        
+        // printThird.run() outputs "third". Do not change or remove this line.
+        printThird.run();
+    }
+}
